@@ -1,0 +1,17 @@
+{
+  "name": "is-the-district-line-f--cked",
+  "version": "1.0.0",
+  "description": "is the district line f##cked?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Samuel Hornsey",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/kv": "^3.0.0",
+    "axios": "^1.7.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0"
+  }
+}
