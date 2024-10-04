@@ -10,6 +10,7 @@ app.set('views', path.join(__dirname, 'views')); // Change 'templates' to your d
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
 
+// get the district line status
 const getStatus = async () => {
   const config = {
     method: 'GET',
@@ -41,8 +42,12 @@ const getStatus = async () => {
 }
 
 app.get('/', async (req, res) => {
-  const distruptions = await getStatus();
-  res.render('index', { distruptions });
+  try {
+    const distruptions = await getStatus();
+    res.render('index', { distruptions });
+  } catch {
+    res.status(500).render("something went wrong");
+  }
 });
 
 module.exports = app;

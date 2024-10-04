@@ -4,7 +4,9 @@
   "description": "is the district line f##cked?",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "watch": "rollup -c --watch"
   },
   "author": "Samuel Hornsey",
   "license": "MIT",
@@ -12,6 +14,15 @@
     "@vercel/kv": "^3.0.0",
     "axios": "^1.7.7",
     "ejs": "^3.1.10",
-    "express": "^4.21.0"
+    "express": "^4.21.0",
+    "postcss": "^8.4.47",
+    "rollup-plugin-postcss": "^4.0.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.24.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

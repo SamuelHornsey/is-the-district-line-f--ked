@@ -5,13 +5,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>is the district line f*cked?</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <script src="bundle.js" defer></script>
 </head>
 
 <body>
-  <% if (distruptions.length > 0) { %>
-    <h1>Yes.</h1>
-  <% } else { %>
-    <h1>Surprisingly No.</h1>
-  <% } %>
+  <section>
+    <div class="container">
+      <div class="content">
+        <h3 class="question">is the district line f--ked?</h3>
+
+        <% if (distruptions.length> 0) { %>
+          <h1 class="main">As always, yes.</h1>
+        <% } else { %>
+          <h1 class="main">Surprisingly No.</h1>
+        <% } %>
+
+        <h3 class="date"></h3>
+      </div>
+    </div>
+  </section>
+
 </body>
+
 </html>
