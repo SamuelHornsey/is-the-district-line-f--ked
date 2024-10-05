@@ -2,6 +2,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const terser = require('@rollup/plugin-terser'); // Optional: for minification
 const postcss = require('rollup-plugin-postcss');
+const path = require('path');
 
 module.exports = {
   input: 'src/main.js', // Path to your main JavaScript file
@@ -15,7 +16,7 @@ module.exports = {
     commonjs(), // Converts CommonJS to ES modules
     terser(), // Optional: minifies the bundle
     postcss({
-      plugins: []
+      extract: path.resolve('public/styles.css')
     })
   ],
 };

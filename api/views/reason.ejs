@@ -12,20 +12,16 @@
       <div class="content">
         <h3 class="question">is the district line f--ked?</h3>
 
-        <% if (distruptions.length> 0) { %>
-        <h1 class="main">As always, yes.</h1>
-        <% } else { %>
-        <h1 class="main">Surprisingly No.</h1>
-        <% } %>
-
-        <h5 class="comment">(<%= comment %>)</h5>
+        <p class="reason">
+          <%= distruptions[0].reason %>
+        </p>
 
         <h3 class="date">
           <%= date %>
         </h3>
 
         <div>
-          <a href="/reason" class="question">reason it's f--ked?</a>
+          <a href="/" class="question">is it f--ked?</a>
         </div>
       </div>
     </section>
