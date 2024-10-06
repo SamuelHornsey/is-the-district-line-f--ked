@@ -14,6 +14,13 @@
 - Sends a notification if it stops working.
 - That is all.
 
+## TODO
+
+- Fix rollup config, upgrade plugins.
+- Add debug notifications prefix for local.
+- Cleanup services worker.
+- Make full installable PWA.
+
 ## FAQ
 
 ***Why the district line?***
