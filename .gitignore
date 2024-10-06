@@ -4,3 +4,5 @@ node_modules
 bundle.js
 styles.css
 .DS_Store
+public
+scratch

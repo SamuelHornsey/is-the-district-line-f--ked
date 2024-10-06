@@ -12,13 +12,15 @@
       <div class="content">
         <h3 class="question">is the district line f--ked?</h3>
 
-        <% if (distruptions.length> 0) { %>
+        <% if (distruptions.length > 0) { %>
         <h1 class="main">As always, yes.</h1>
         <% } else { %>
         <h1 class="main">Surprisingly No.</h1>
         <% } %>
 
-        <h5 class="comment">(<%= comment %>)</h5>
+        <% if (distruptions.length > 0) { %>
+          <h5 class="comment">(<%= comment %>)</h5>
+        <% } %>
 
         <h3 class="date">
           <%= date %>

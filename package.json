@@ -11,6 +11,8 @@
   "author": "Samuel Hornsey",
   "license": "MIT",
   "dependencies": {
+    "@pusher/push-notifications-server": "^1.2.6",
+    "@pusher/push-notifications-web": "^1.1.0",
     "@vercel/kv": "^3.0.0",
     "axios": "^1.7.7",
     "ejs": "^3.1.10",
@@ -23,6 +25,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "rollup": "^4.24.0",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

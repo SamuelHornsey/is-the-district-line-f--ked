@@ -1,14 +1,22 @@
 const path = require("path");
 const express = require("express");
 const axios = require("axios");
+const PushNotifications = require('@pusher/push-notifications-server');
 
 // create express app
 const app = express();
 
-app.set('views', path.join(__dirname, 'views')); // Change 'templates' to your desired folder name
+// set view path
+app.set('views', path.join(__dirname, 'views'));
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
+
+// set up beams client
+const beamsClient = new PushNotifications({
+  instanceId: process.env.BEAMS_INSTANCE_ID,
+  secretKey: process.env.BEAMS_SECRET_KEY,
+});
 
 // get the current date string
 const getCurrentDate = () => {
@@ -53,11 +61,14 @@ const getStatus = async () => {
     method: 'GET',
     url: `${process.env.TFL_API_URL}/Line/district/status`,
     headers: {
-      'app_key': process.env.TFL_API_TOKEN
+      'app_key': process.env.TFL_API_TOKEN,
+      'Accept': 'application/json'
     }
   }
 
   const resp = await axios.request(config);
+
+  console.log(resp, resp.data);
 
   if (resp.data.lenth === 0) {
     throw Error('unable to get tfl status');
@@ -65,6 +76,10 @@ const getStatus = async () => {
 
   const district = resp.data[0];
   const distruptions = [];
+
+  if (!district.lineStatuses) {
+    throw Error('incorrect tfl api response');
+  }
 
   for (let status of district.lineStatuses) {
     if (status.statusSeverity < 10) {
@@ -84,8 +99,8 @@ app.get('/', async (req, res) => {
     const date = getCurrentDate();
     const comment = getComment();
     res.render('index', { distruptions, date, comment });
-  } catch {
-    res.status(500).render("something went wrong");
+  } catch (error) {
+    res.status(500).send("something went wrong");
   }
 });
 
@@ -94,13 +109,34 @@ app.get('/reason', async (req, res) => {
     const distruptions = await getStatus();
     const date = getCurrentDate();
     res.render('reason', { distruptions, date });
-  } catch {
-    res.status(500).render("something went wrong");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("something went wrong");
   }
 });
 
 app.get('/about', async (req, res) => {
   res.render('about');
+});
+
+app.get('/_notify', async (req, res) => {
+  try {
+    const distruptions = await getStatus();
+    const status = distruptions.length > 0 ? 'uh oh! the district line is currently f--ked!' : 'wow! suprisingly the district line is okay!'
+
+    const resp = await beamsClient.publishToInterests(['district-line'], {
+      web: {
+        notification: {
+          title: 'is the district line f--ked?',
+          body: status
+        }
+      }
+    });
+    const id = await resp.publishId;
+    res.json({ id });
+  } catch (error) {
+    res.status(500).json({ error: 'something went wrong' });
+  }
 });
 
 module.exports = app;
