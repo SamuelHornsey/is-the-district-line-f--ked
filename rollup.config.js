@@ -1,5 +1,5 @@
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
+const resolve = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
 const terser = require('@rollup/plugin-terser'); // Optional: for minification
 const postcss = require('rollup-plugin-postcss');
 const copy = require('rollup-plugin-copy');

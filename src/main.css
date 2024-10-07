@@ -68,6 +68,31 @@ body {
 }
 
 .reason {
-  font-size: 20px;
+  font-size: 18px;
   color: #161616;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 0px;
+}
+
+.notifications {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  border: none;
+  background: none;
+  color: #E8E8E8;
+  cursor: pointer;
+}
+
+.granted {
+  display: none;
 }

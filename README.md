@@ -18,7 +18,6 @@
 
 - Fix rollup config, upgrade plugins.
 - Add debug notifications prefix for local.
-- Cleanup services worker.
 - Make full installable PWA.
 
 ## FAQ

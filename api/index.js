@@ -41,10 +41,10 @@ const getCurrentDate = () => {
   const month = date.toLocaleString('en-gb', { month: 'long' });
   const year = date.getFullYear();
 
-
   return `Today is ${day} the ${dateSuffix} of ${month} ${year}`;
 }
 
+// get sass comment
 const getComment = () => {
   const comments = [
     'have they tried turning it off and on again?',
@@ -56,19 +56,27 @@ const getComment = () => {
 }
 
 // get the district line status
-const getStatus = async () => {
+const getStatus = async (attempt = 1) => {
+  if (attempt > 10) {
+    return Error('too many attempts to tfl api');
+  }
+
   const config = {
     method: 'GET',
     url: `${process.env.TFL_API_URL}/Line/district/status`,
     headers: {
       'app_key': process.env.TFL_API_TOKEN,
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
     }
   }
 
   const resp = await axios.request(config);
+  console.log(resp.headers['content-type']);
 
-  console.log(resp, resp.data);
+  if (resp.headers['content-type'].includes('text/xml')) {
+    return getStatus(attempt + 1);
+  }
 
   if (resp.data.lenth === 0) {
     throw Error('unable to get tfl status');
@@ -110,7 +118,6 @@ app.get('/reason', async (req, res) => {
     const date = getCurrentDate();
     res.render('reason', { distruptions, date });
   } catch (error) {
-    console.log(error);
     res.status(500).send("something went wrong");
   }
 });
