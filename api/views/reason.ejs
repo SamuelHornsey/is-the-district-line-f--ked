@@ -13,7 +13,11 @@
         <h3 class="question">is the district line f--ked?</h3>
 
         <p class="reason">
-          <%= distruptions[0].reason %>
+          <% if (distruptions.length > 0) { %>
+            <%= distruptions[0].reason %>
+          <% } else { %>
+            it's not f--ked today!
+          <% } %>
         </p>
 
         <h3 class="date">
