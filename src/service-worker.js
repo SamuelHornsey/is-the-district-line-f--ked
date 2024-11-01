@@ -1,4 +1,4 @@
-self.addEventListener('push', (event) => {
+self.addEventListener("push", (event) => {
   let payload = event.data.json();
   event.waitUntil(
     self.registration.showNotification(payload.notification.title, {
@@ -9,7 +9,7 @@ self.addEventListener('push', (event) => {
   );
 });
 
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   event.waitUntil(

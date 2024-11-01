@@ -1,16 +1,16 @@
 const path = require("path");
 const express = require("express");
 const axios = require("axios");
-const PushNotifications = require('@pusher/push-notifications-server');
+const PushNotifications = require("@pusher/push-notifications-server");
 
 // create express app
 const app = express();
 
 // set view path
-app.set('views', path.join(__dirname, 'views'));
+app.set("views", path.join(__dirname, "views"));
 
 // Set EJS as the templating engine
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 // set up beams client
 const beamsClient = new PushNotifications({
@@ -22,8 +22,10 @@ const beamsClient = new PushNotifications({
 const getCurrentDate = () => {
   const date = new Date();
 
-  const ordinalSuffix = (number) => {
-    if (number >= 11 && number <= 13) return 'th';
+  const ordinalSuffix = () => {
+    const number = date.getDate();
+
+    if (number >= 11 && number <= 13) return "th";
     switch (number % 10) {
       case 1:
         return "st";
@@ -36,9 +38,9 @@ const getCurrentDate = () => {
     }
   }
 
-  const day = date.toLocaleString('en-gb', { weekday: 'long' });
+  const day = date.toLocaleString("en-gb", { weekday: "long" });
   const dateSuffix = `${date.getDate()}${ordinalSuffix()}`;
-  const month = date.toLocaleString('en-gb', { month: 'long' });
+  const month = date.toLocaleString("en-gb", { month: "long" });
   const year = date.getFullYear();
 
   return `Today is ${day} the ${dateSuffix} of ${month} ${year}`;
@@ -47,9 +49,9 @@ const getCurrentDate = () => {
 // get sass comment
 const getComment = () => {
   const comments = [
-    'have they tried turning it off and on again?',
-    'Cool, I\'ll just teleport to my destination instead.',
-    'District line distruption? That never happens?'
+    "have they tried turning it off and on again?",
+    "Cool, I\"ll just teleport to my destination instead.",
+    "District line distruption? That never happens?"
   ]
 
   return comments[Math.floor(Math.random() * comments.length)];
@@ -58,35 +60,35 @@ const getComment = () => {
 // get the district line status
 const getStatus = async (attempt = 1) => {
   if (attempt > 10) {
-    return Error('too many attempts to tfl api');
+    return Error("too many attempts to tfl api");
   }
 
   const config = {
-    method: 'GET',
+    method: "GET",
     url: `${process.env.TFL_API_URL}/Line/district/status`,
     headers: {
-      'app_key': process.env.TFL_API_TOKEN,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      "app_key": process.env.TFL_API_TOKEN,
+      "Accept": "application/json",
+      "Content-Type": "application/json"
     }
   }
 
   const resp = await axios.request(config);
-  console.log(resp.headers['content-type']);
+  console.log(resp.headers["content-type"]);
 
-  if (resp.headers['content-type'].includes('text/xml')) {
+  if (resp.headers["content-type"].includes("text/xml")) {
     return getStatus(attempt + 1);
   }
 
   if (resp.data.lenth === 0) {
-    throw Error('unable to get tfl status');
+    throw Error("unable to get tfl status");
   }
 
   const district = resp.data[0];
   const distruptions = [];
 
   if (!district.lineStatuses) {
-    throw Error('incorrect tfl api response');
+    throw Error("incorrect tfl api response");
   }
 
   for (let status of district.lineStatuses) {
@@ -101,48 +103,48 @@ const getStatus = async (attempt = 1) => {
   return distruptions;
 }
 
-app.get('/', async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     const distruptions = await getStatus();
     const date = getCurrentDate();
     const comment = getComment();
-    res.render('index', { distruptions, date, comment });
-  } catch (error) {
+    res.render("index", { distruptions, date, comment });
+  } catch {
     res.status(500).send("something went wrong");
   }
 });
 
-app.get('/reason', async (req, res) => {
+app.get("/reason", async (req, res) => {
   try {
     const distruptions = await getStatus();
     const date = getCurrentDate();
-    res.render('reason', { distruptions, date });
-  } catch (error) {
+    res.render("reason", { distruptions, date });
+  } catch {
     res.status(500).send("something went wrong");
   }
 });
 
-app.get('/about', async (req, res) => {
-  res.render('about');
+app.get("/about", async (req, res) => {
+  res.render("about");
 });
 
-app.get('/_notify', async (req, res) => {
+app.get("/_notify", async (req, res) => {
   try {
     const distruptions = await getStatus();
-    const status = distruptions.length > 0 ? 'uh oh! the district line is currently f--ked!' : 'wow! suprisingly the district line is okay!'
+    const status = distruptions.length > 0 ? "uh oh! the district line is currently f--ked!" : "wow! suprisingly the district line is okay!"
 
-    const resp = await beamsClient.publishToInterests(['district-line'], {
+    const resp = await beamsClient.publishToInterests(["district-line"], {
       web: {
         notification: {
-          title: 'is the district line f--ked?',
+          title: "is the district line f--ked?",
           body: status
         }
       }
     });
     const id = await resp.publishId;
     res.json({ id });
-  } catch (error) {
-    res.status(500).json({ error: 'something went wrong' });
+  } catch {
+    res.status(500).json({ error: "something went wrong" });
   }
 });
 
